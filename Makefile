@@ -11,6 +11,8 @@ RUSTLIB = target/arm-none-eabi/debug/libdevos.a
 
 .PHONY : all clean $(RUSTLIB)
 
+all: devos
+
 $(RUSTLIB):
 	$(CARGO) build --target=arm-none-eabi
 
@@ -22,8 +24,6 @@ devos: devos.o
 
 uImage: devos
 	mkimage -C none -A arm -T kernel -O linux -a 0xC0008000 -e 0xC0008000 -d $< $@
-
-all: devos
 
 clean:
 	rm -rf *.o devos target
