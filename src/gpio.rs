@@ -1,21 +1,15 @@
+use rlibc::{memcmp, memcpy};
+
+#[repr(u8)]
+enum c_void { #[doc(hidden)] __hidden }
+
 extern {
-    static mut da8xx_syscfg0_base : *mut ::std::os::raw::c_void;
-    fn iowrite32(value : u32, addr : *mut ::std::os::raw::c_void);
-    fn memcmp(
-        s1 : *const ::std::os::raw::c_void,
-        s2 : *const ::std::os::raw::c_void,
-        n : i32
-    ) -> i32;
-    fn memcpy(
-        dest : *mut ::std::os::raw::c_void,
-        src : *const ::std::os::raw::c_void,
-        n : i32
-    ) -> *mut ::std::os::raw::c_void;
+    fn iowrite32(value : u32, addr : *mut c_void);
     fn printk(format : *const u8, ...) -> i32;
 }
 
-#[no_mangle]
-pub static mut HwId : *mut u8 = (*b"03\0").as_ptr() as (*mut u8);
+static mut HwId : *mut u8 = (*b"03\0").as_ptr() as (*mut u8);
+static mut da8xx_syscfg0_base : *mut c_void;
 
 #[derive(Clone, Copy)]
 #[repr(C)]
@@ -1215,13 +1209,13 @@ pub static mut pUiButPin
       ];
 
 static mut GpioBase
-    : *mut ::std::os::raw::c_void
-    = 0 as (*mut ::std::os::raw::c_void);
+    : *mut c_void
+    = 0 as (*mut c_void);
 
 #[no_mangle]
 pub unsafe extern fn SetGpio(mut Pin : i32) {
     let mut Tmp : i32 = 0i32;
-    let mut Reg : *mut ::std::os::raw::c_void;
+    let mut Reg : *mut c_void;
     if Pin >= 0i32 {
         'loop1: loop {
             if MuxRegMap[Tmp as (usize)].Pin != -1i32 && (MuxRegMap[
@@ -1270,13 +1264,13 @@ pub unsafe extern fn InitGpio() {
         da8xx_syscfg0_base.offset(0x3ci32 as (isize))
     );
     memcpy(
-        UiLedPin.as_mut_ptr() as (*mut ::std::os::raw::c_void),
-        pUiLedPin[Hw as (usize)] as (*const ::std::os::raw::c_void),
+        UiLedPin.as_mut_ptr() as (*mut c_void),
+        pUiLedPin[Hw as (usize)] as (*const c_void),
         ::std::mem::size_of::<[Struct3; 4]>() as (i32)
     );
     if memcmp(
-           UiLedPin.as_mut_ptr() as (*const ::std::os::raw::c_void),
-           pUiLedPin[Hw as (usize)] as (*const ::std::os::raw::c_void),
+           UiLedPin.as_mut_ptr() as (*const c_void),
+           pUiLedPin[Hw as (usize)] as (*const c_void),
            ::std::mem::size_of::<[Struct3; 4]>() as (i32)
        ) != 0i32 {
         printk(
@@ -1307,13 +1301,13 @@ pub unsafe extern fn InitGpio() {
         }
     }
     memcpy(
-        UiButPin.as_mut_ptr() as (*mut ::std::os::raw::c_void),
-        pUiButPin[Hw as (usize)] as (*const ::std::os::raw::c_void),
+        UiButPin.as_mut_ptr() as (*mut c_void),
+        pUiButPin[Hw as (usize)] as (*const c_void),
         ::std::mem::size_of::<[Struct3; 6]>() as (i32)
     );
     if memcmp(
-           UiButPin.as_mut_ptr() as (*const ::std::os::raw::c_void),
-           pUiButPin[Hw as (usize)] as (*const ::std::os::raw::c_void),
+           UiButPin.as_mut_ptr() as (*const c_void),
+           pUiButPin[Hw as (usize)] as (*const c_void),
            ::std::mem::size_of::<[Struct3; 6]>() as (i32)
        ) != 0i32 {
         printk(
