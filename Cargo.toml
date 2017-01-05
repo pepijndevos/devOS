@@ -9,9 +9,3 @@ compiler_builtins = { git = "https://github.com/rust-lang-nursery/compiler-built
 
 [lib]
 crate-type = ["staticlib"]
-
-[profile.dev]
-panic = "abort"
-
-[profile.release]
-panic = "abort"
