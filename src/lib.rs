@@ -14,11 +14,17 @@ mod gpio;
 #[no_mangle]
 pub extern "C" fn rust_main() {
     write!(uart::UART0, "hello {}\r\n", "Pepijn").unwrap();
+    unsafe {
+        gpio::init_gpio();
+    }
+    write!(uart::UART0, "GPIO init done\r\n").unwrap();
 }
 
 #[lang = "panic_fmt"]
 #[no_mangle]
-pub extern fn panic_fmt() -> ! {loop{}}
+pub extern "C" fn panic_fmt() -> ! {
+    loop {}
+}
 
 // something is inserting annoying functions in my code
 #[no_mangle]

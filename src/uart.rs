@@ -6,7 +6,10 @@ pub struct Uart {
     lsr: *mut u8,
 }
 
-pub const UART0 : Uart = Uart { thr: 0x01D0C000 as *mut u8, lsr: 0x01D0C014 as *mut u8 };
+pub const UART0: Uart = Uart {
+    thr: 0x01D0C000 as *mut u8,
+    lsr: 0x01D0C014 as *mut u8,
+};
 
 impl Write for Uart {
     fn write_str(&mut self, s: &str) -> Result {
